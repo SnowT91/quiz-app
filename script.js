@@ -1,6 +1,6 @@
-const question = [
+const questions = [
     {
-        question: "What is the capital of France?"
+        question: "What is the capital of France?",
         answers: [
             { text: "Paris", correct: true },
             { text: "London", correct: false },
@@ -9,7 +9,7 @@ const question = [
         ]
     },
     {
-        question: "Which language runs in web browaer?"
+        question: "Which language runs in web browser?",
         answers: [
             { text: "Java", correct: false },
             { text: "C", correct: false },
@@ -18,7 +18,7 @@ const question = [
         ]
     },
     {
-      question: "Who wrote 'Harry Potter'?"
+        question: "Who wrote 'Harry Potter'?",
         answers: [
             { text: "J.K. Rowling", correct: true },
             { text: "J.R.R. Tolkien", correct: false },
@@ -41,8 +41,8 @@ let score = 0;
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
-    resultContainer.classicList.add("hidden");
-    questionContainer.classicList.remove("hidden");
+    resultContainer.classList.add("hidden");
+    questionContainer.classList.remove("hidden");
     showQuestion();
 }
 
@@ -53,8 +53,8 @@ function showQuestion() {
 
     currentQuestion.answers.forEach(answer => {
         const button = document.createElement("button");
-        button.textContent = answer.text
-        button.classicList.add("btn");
+        button.textContent = answer.text;
+        button.classList.add("btn");
         if(answer.correct) {
             button.dataset.correct = answer.correct;
         }
@@ -70,14 +70,14 @@ function resetState() {
 }
 
 function selectAnswer(e) {
-    const selectButton = e.target;
-    const correct = selectButton.dataset.correct === "true";
+    const selectedButton = e.target;
+    const correct = selectedButton.dataset.correct === "true";
 
     if(correct) {
-        selectButton.classicList.add("correct");
+        selectedButton.classList.add("correct");
         score++;
     } else {
-        selectedButton.classicList.add("wrong");
+        selectedButton.classList.add("wrong");
     }
 
     Array.from(answerButtons.children).forEach(button => {
@@ -100,7 +100,7 @@ function selectAnswer(e) {
 function showResult() {
     questionContainer.classList.add("hidden");
     resultContainer.classList.remove("hidden");
-    scoreElement.textContent = 'You scored ${score} out of ${questions.length}';
+    scoreElement.textContent = `You scored ${score} out of ${questions.length}`;
 }
 
 restartBtn.addEventListener("click", startQuiz);
