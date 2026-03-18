@@ -25,6 +25,24 @@ const questions = [
             { text: "Mark Twain", correct: false },
             { text: "Ernest Hemingway", correct: false }  
         ]
+    },
+    {
+        question: "What does CSS stand for?",
+        answers: [
+            { text: "Computer Style Sheets", correct: false },
+            { text: "Cascading Style Sheets", correct: true },
+            { text: "Creative Style Sheets", correct: false },
+            { text: "Colorful Style Sheets", correct: false } 
+        ]
+    },
+    {
+        question: "Which company developed JavaScript?",
+        answers: [
+            { text: "Microsoft", correct: false },
+            { text: "Sun Microsystems", correct: false },
+            { text: "Netscape", correct: true },
+            { text: "Oracle", correct: false } 
+        ]
     }
 ];
 
@@ -34,9 +52,13 @@ const answerButtons = document.getElementById("answer-buttons");
 const resultContainer = document.getElementById("result-container");
 const scoreElement = document.getElementById("score");
 const restartBtn = document.getElementById("restart-btn");
+const timerElement = document.getElementById("timer");
+const progressBar = document.getElementById("progree-bar");
 
 let currentQuestionIndex = 0;
 let score = 0;
+let timer;
+let timerLeft = 10;
 
 function startQuiz() {
     currentQuestionIndex = 0;
@@ -48,25 +70,59 @@ function startQuiz() {
 
 function showQuestion() {
     resetState();
+    updateProgressBar();
+
     const currentQuestion = questions[currentQuestionIndex];
     questionElement.textContent = currentQuestion.question;
 
-    currentQuestion.answers.forEach(answer => {
+    currentQuestion.answers.forEach((answer) => {
         const button = document.createElement("button");
         button.textContent = answer.text;
-        button.classList.add("btn");
+
         if(answer.correct) {
-            button.dataset.correct = answer.correct;
+            button.dataset.correct = "true";
         }
+
         button.addEventListener("click", selectAnswer);
         answerButtons.appendChild(button);
     });
+
+    startTimer();
 }
 
 function resetState() {
+    clearInterval(timer);
+    timerLeft = 10;
+    timerElement.textContent = timerLeft;
+
     while(answerButtons.firstChild) {
         answerButtons.removeChild(answerButtons.firstChild);
     }
+}
+
+function startTimer() {
+    timer = setInterval(() => {
+        timerLeft--;
+        timerElement.textContent = timerLeft;
+
+        if (timerLeft <=0) {
+            clearInterval(timer);
+            handleTimeOut();
+        }
+    }, 1000);
+}
+
+function handleTimeOut() {
+    Array.from(answerButtons.children).forEach((button) => {
+        if (button.dataset.correct === "true") {
+            button.classList.add("correct");
+        }
+        button.disabled = true;
+    });
+
+    setTimeout(() => {
+        goToNextQuestion();
+    }, 1000);
 }
 
 function selectAnswer(e) {
