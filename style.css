@@ -82,10 +82,10 @@ button.correct {
 
 button.wrong {
     background: #e74c3c;
-    animation; shake 0.35s ease;
+    animation: shake 0.35s ease;
 }
 
-button: :disabled {
+button:disabled {
     cursor: not-allowed;
     opacity: 0.95;
 }
