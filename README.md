@@ -19,6 +19,12 @@ Interactive Quiz App built with HTML, CSS and JavaScript.
 
 This project helps practice DOM manipulation, event handling, dynamic UI updates, and basic JavaScript logic.
 
+## Live Demo
+
+[Open Project](https://quiz-app-archyteam.netlify.app)
+
 ## Screenshot
 
 ![Quiz App Screenshot](images/screenshot.png)
+
+
