@@ -53,7 +53,7 @@ const resultContainer = document.getElementById("result-container");
 const scoreElement = document.getElementById("score");
 const restartBtn = document.getElementById("restart-btn");
 const timerElement = document.getElementById("timer");
-const progressBar = document.getElementById("progree-bar");
+const progressBar = document.getElementById("progress-bar");
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -126,6 +126,8 @@ function handleTimeOut() {
 }
 
 function selectAnswer(e) {
+    clearInterval(timer);
+
     const selectedButton = e.target;
     const correct = selectedButton.dataset.correct === "true";
 
@@ -144,18 +146,29 @@ function selectAnswer(e) {
     });
 
     setTimeout(() => {
-        currentQuestionIndex++;
-        if(currentQuestionIndex < questions.length) {
-            showQuestion();
-        }   else {
-            showResult();
-        }
+        goToNextQuestion();
     }, 1000);
+}
+
+function goToNextQuestion() {
+    currentQuestionIndex++
+
+    if (currentQuestionIndex < questions.length) {
+        showQuestion();
+    }   else {
+        showResult();
+    }
+}
+
+function updateProgressBar() {
+    const progress = (currentQuestionIndex / questions.length) * 100;
+    progressBar.style.width = `${progress}%`;
 }
 
 function showResult() {
     questionContainer.classList.add("hidden");
     resultContainer.classList.remove("hidden");
+    progressBar.style.width = "100%";
     scoreElement.textContent = `You scored ${score} out of ${questions.length}`;
 }
 

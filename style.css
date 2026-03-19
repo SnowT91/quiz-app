@@ -67,7 +67,7 @@ button {
     cursor: pointer;
     background: #3498db;
     color: white;
-    transition: transform 0.2 ease, opacity 0.2 ease, background 0.2 ease;
+    transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
 }
 
 button:hover {
