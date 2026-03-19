@@ -161,7 +161,7 @@ function goToNextQuestion() {
 }
 
 function updateProgressBar() {
-    const progress = (currentQuestionIndex / questions.length) * 100;
+    const progress = ((currentQuestionIndex +1) / questions.length) * 100;
     progressBar.style.width = `${progress}%`;
 }
 
