@@ -5,9 +5,12 @@ Interactive Quiz App built with HTML, CSS and JavaScript.
 ## Features
 
 - Multiple choice questions
-- Shows correct/incorrect answers
+- Highlights correct and incorrect answers
 - Score calculation
 - Restart quiz functionality
+- 10-second timer for each question
+- Progress bar quiz completion
+- Animated feddback for selected answers
 
 ## Technologies
 
@@ -17,7 +20,7 @@ Interactive Quiz App built with HTML, CSS and JavaScript.
 
 ## Project Goal
 
-This project helps practice DOM manipulation, event handling, dynamic UI updates, and basic JavaScript logic.
+This project helps practice DOM manipulation, event handling, state management, timers, and dynamic UI updates with vanilla JavaScript.
 
 ## Live Demo
 
@@ -26,5 +29,3 @@ This project helps practice DOM manipulation, event handling, dynamic UI updates
 ## Screenshot
 
 ![Quiz App Screenshot](images/screenshot.png)
-
-
