@@ -46,11 +46,18 @@ const questions = [
     }
 ];
 
+const startScreen = document.getElementById("start-screen");
+const quizScreen = document.getElementById("quiz-screen");
+const startBtn = document.getElementById("start-btn");
+const questionCounter = document.getElementById("question-counter");
 const questionContainer = document.getElementById("question-container");
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
+const nextBtn = document.getElementById("next-btn");
 const resultContainer = document.getElementById("result-container");
 const scoreElement = document.getElementById("score");
+const bestScoreElement = document.getElementById("best-score");
+const resultMessageElement = document.getElementById("result-message");
 const restartBtn = document.getElementById("restart-btn");
 const timerElement = document.getElementById("timer");
 const progressBar = document.getElementById("progress-bar");
@@ -63,14 +70,20 @@ let timerLeft = 10;
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
+
+    startScreen.classList.add("hidden");
     resultContainer.classList.add("hidden");
-    questionContainer.classList.remove("hidden");
+    quizScreen.classList.remove("hidden");
+
+    nextBtn.classList.add("hidden");
+
     showQuestion();
 }
 
 function showQuestion() {
     resetState();
     updateProgressBar();
+    updateQuestionCounter();
 
     const currentQuestion = questions[currentQuestionIndex];
     questionElement.textContent = currentQuestion.question;
@@ -94,6 +107,7 @@ function resetState() {
     clearInterval(timer);
     timerLeft = 10;
     timerElement.textContent = timerLeft;
+    nextBtn.classList.add("hidden");
 
     while(answerButtons.firstChild) {
         answerButtons.removeChild(answerButtons.firstChild);
@@ -120,9 +134,7 @@ function handleTimeOut() {
         button.disabled = true;
     });
 
-    setTimeout(() => {
-        goToNextQuestion();
-    }, 1000);
+    nextBtn.classList.remove("hidden");
 }
 
 function selectAnswer(e) {
@@ -131,31 +143,29 @@ function selectAnswer(e) {
     const selectedButton = e.target;
     const correct = selectedButton.dataset.correct === "true";
 
-    if(correct) {
+    if (correct) {
         selectedButton.classList.add("correct");
         score++;
     } else {
         selectedButton.classList.add("wrong");
     }
 
-    Array.from(answerButtons.children).forEach(button => {
-        if(button.dataset.correct === "true") {
+    Array.from(answerButtons.children).forEach((button) => {
+        if (button.dataset.correct === "true") {
             button.classList.add("correct");
         }
         button.disabled = true;
     });
 
-    setTimeout(() => {
-        goToNextQuestion();
-    }, 1000);
+    nextBtn.classList.remove("hidden");
 }
 
 function goToNextQuestion() {
-    currentQuestionIndex++
+    currentQuestionIndex++;
 
     if (currentQuestionIndex < questions.length) {
         showQuestion();
-    }   else {
+    } else {
         showResult();
     }
 }
@@ -165,13 +175,21 @@ function updateProgressBar() {
     progressBar.style.width = `${progress}%`;
 }
 
-function showResult() {
-    questionContainer.classList.add("hidden");
-    resultContainer.classList.remove("hidden");
-    progressBar.style.width = "100%";
-    scoreElement.textContent = `You scored ${score} out of ${questions.length}`;
+function updateQuestionCounter() {
+    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
 }
 
-restartBtn.addEventListener("click", startQuiz);
+function showResult() {
+    quizScreen.classList.add("hidden");
+    resultContainer.classList.remove("hidden");
 
-startQuiz();
+    progressBar.style.width = "100%";
+
+    scoreElement.textContent = `You scored ${score} out of ${questions.length}`;
+    bestScoreElement.textContent = "";
+    resultMessageElement.textContent = "";
+}
+
+startBtn.addEventListener("click", startQuiz);
+nextBtn.addEventListener("click", goToNextQuestion);
+restartBtn.addEventListener("click", startQuiz);
