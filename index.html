@@ -16,6 +16,25 @@
                 <span>5 Questions</span>
                 <span>10s per question</span>
             </div>
+
+            <div class="option-group">
+                <label>Category:</label>
+                <select id="category">
+                    <option value="all">All</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="general">General</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <label>Difficulty</label>
+                <select id="difficulty">
+                    <option value="all">All</option>
+                    <option value="easy">Easy</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+
             <button id="start-btn" class="primary-btn">Start Quiz</button>
         </div>
 
@@ -31,7 +50,7 @@
                 </div>
             </div>
 
-            <div id="question-container" class="question-container">
+            <div id="question-container" class="question-container hidden">
                 <div id="question" class="question">Question text</div>
                 <div id="answer-buttons" class="answer-buttons">
                     <!-- Buttons will be dynamically added here -->

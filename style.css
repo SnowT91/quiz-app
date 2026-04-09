@@ -32,7 +32,7 @@ h1 {
 .start-screen {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
 .quiz-intro {
@@ -55,6 +55,20 @@ h1 {
     border-radius: 999px;
     font-size: 14px;
     font-weight: bold;
+}
+
+.option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
 }
 
 .progress-wrapper {
