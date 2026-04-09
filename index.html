@@ -10,23 +10,42 @@
     <div class="quiz-container">
         <h1>Quiz App</h1>
 
-        <div class="progress-wrapper">
-            <div id="progress-bar" class="progress-bar"></div>
-        </div>
-
-        <div class="timer"> 
-            Time left: <span id="timer">10</span>s
-        </div>
-
-        <div id="question-container" class="question-container">
-            <div id="question" class="question">Question text</div>
-            <div id="answer-buttons" class="answer-buttons">
-                <!-- Buttons will be dynamically added here -->
+        <div id="start-screen" class="start-screen">
+            <p class="quiz-intro">Test your knowledge with 5 quick questions.</p>
+            <div class="quiz-meta">
+                <span>5 Questions</span>
+                <span>10s per question</span>
             </div>
+            <button id="start-btn" class="primary-btn">Start Quiz</button>
         </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div class="progress-wrapper">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+
+            <div class="quiz-info">
+                <div class="question-counter" id="question-counter">Question 1 of 5</div>
+                <div class="timer"> 
+                    Time left: <span id="timer">10</span>s
+                </div>
+            </div>
+
+            <div id="question-container" class="question-container">
+                <div id="question" class="question">Question text</div>
+                <div id="answer-buttons" class="answer-buttons">
+                    <!-- Buttons will be dynamically added here -->
+                </div>
+            </div>
+
+            <button id="next-btn" class="next-btn hidden">Next Question</button>
+        </div>
+
         <div id="result-container" class="result-container hidden">
             <h2 id="score"></h2>
-            <button id="restart-btn" class="restart-btn">Restart Quiz</button>
+            <p id="best-score" class="best-score"></p>
+            <p id="result-message" class="result-message"></p>
+            <button id="restart-btn" class="restart-btn">Play Again</button>
         </div>
     </div>
 
