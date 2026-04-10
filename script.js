@@ -80,6 +80,15 @@ let timer;
 let timerLeft = 10;
 let filteredQuestions = [];
 
+function getResultMessage() {
+    const percent = (score / filteredQuestions.length) * 100;
+
+    if (percent === 100) return "Perfect! 🚀";
+    if (percent >= 70) return "Great job! 👍";
+    if (percent >= 50) return "Not bad 🙂";
+    return "Keep practicing 💪";
+}
+
 function filterQuestions() {
     const category = categorySelect.value;
     const difficulty = difficultySelect.value;
@@ -89,19 +98,22 @@ function filterQuestions() {
                 (difficulty === "all" || q.difficulty === difficulty);
     });
 
-    if (filterQuestions.length === 0) {
-        filterQuestions = questions;
+    if (filteredQuestions.length === 0) {
+        filteredQuestions = questions;
     }
 }
 
 function startQuiz() {
-    currentQuestionIndex = 0;
-    score = 0;
+    startScreen.classList.add("hidden");
 
     filterQuestions();
 
-    startScreen.classList.add("hidden");
+    currentQuestionIndex = 0;
+    score = 0;
+    
     resultContainer.classList.add("hidden");
+    questionContainer.classList.remove("hidden");
+    
     quizScreen.classList.remove("hidden");
 
     nextBtn.classList.add("hidden");
@@ -215,6 +227,13 @@ function showResult() {
     progressBar.style.width = "100%";
 
     scoreElement.textContent = `You scored ${score} out of ${filteredQuestions.length}`;
+    
+    const message = document.createElement("p");
+    message.textContent = getResultMessage();
+
+    const oldMessage = resultContainer.querySelector("p");
+    if (oldMessage) oldMessage.remove();
+
     bestScoreElement.textContent = "";
     resultMessageElement.textContent = "";
 }

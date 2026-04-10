@@ -134,6 +134,7 @@ button {
 button:hover:not(:disabled) {
     opacity: 0.92;
     transform: translateY(-2px);
+    transform: scale(1.03);
 }
 
 button.correct {
