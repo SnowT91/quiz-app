@@ -1,6 +1,8 @@
 const questions = [
     {
         question: "What is the capital of France?",
+        category: "general",
+        difficulty: "easy",
         answers: [
             { text: "Paris", correct: true },
             { text: "London", correct: false },
@@ -10,6 +12,8 @@ const questions = [
     },
     {
         question: "Which language runs in web browser?",
+        category: "javascript",
+        difficulty: "easy",
         answers: [
             { text: "Java", correct: false },
             { text: "C", correct: false },
@@ -19,6 +23,8 @@ const questions = [
     },
     {
         question: "Who wrote 'Harry Potter'?",
+        category: "general",
+        difficulty: "easy",
         answers: [
             { text: "J.K. Rowling", correct: true },
             { text: "J.R.R. Tolkien", correct: false },
@@ -28,6 +34,8 @@ const questions = [
     },
     {
         question: "What does CSS stand for?",
+        category: "javascript",
+        difficulty: "hard",
         answers: [
             { text: "Computer Style Sheets", correct: false },
             { text: "Cascading Style Sheets", correct: true },
@@ -37,6 +45,8 @@ const questions = [
     },
     {
         question: "Which company developed JavaScript?",
+        category: "javascript",
+        difficulty: "hard",
         answers: [
             { text: "Microsoft", correct: false },
             { text: "Sun Microsystems", correct: false },
@@ -68,10 +78,27 @@ let currentQuestionIndex = 0;
 let score = 0;
 let timer;
 let timerLeft = 10;
+let filteredQuestions = [];
+
+function filterQuestions() {
+    const category = categorySelect.value;
+    const difficulty = difficultySelect.value;
+
+    filteredQuestions = questions.filter(q => {
+        return (category === "all" || q.category === category) &&
+                (difficulty === "all" || q.difficulty === difficulty);
+    });
+
+    if (filterQuestions.length === 0) {
+        filterQuestions = questions;
+    }
+}
 
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
+
+    filterQuestions();
 
     startScreen.classList.add("hidden");
     resultContainer.classList.add("hidden");
@@ -87,7 +114,7 @@ function showQuestion() {
     updateProgressBar();
     updateQuestionCounter();
 
-    const currentQuestion = questions[currentQuestionIndex];
+    const currentQuestion = filteredQuestions[currentQuestionIndex];
     questionElement.textContent = currentQuestion.question;
 
     currentQuestion.answers.forEach((answer) => {
@@ -165,7 +192,7 @@ function selectAnswer(e) {
 function goToNextQuestion() {
     currentQuestionIndex++;
 
-    if (currentQuestionIndex < questions.length) {
+    if (currentQuestionIndex < filteredQuestions.length) {
         showQuestion();
     } else {
         showResult();
@@ -173,12 +200,12 @@ function goToNextQuestion() {
 }
 
 function updateProgressBar() {
-    const progress = ((currentQuestionIndex +1) / questions.length) * 100;
+    const progress = ((currentQuestionIndex +1) / filteredQuestions.length) * 100;
     progressBar.style.width = `${progress}%`;
 }
 
 function updateQuestionCounter() {
-    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+    questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${filteredQuestions.length}`;
 }
 
 function showResult() {
@@ -187,7 +214,7 @@ function showResult() {
 
     progressBar.style.width = "100%";
 
-    scoreElement.textContent = `You scored ${score} out of ${questions.length}`;
+    scoreElement.textContent = `You scored ${score} out of ${filteredQuestions.length}`;
     bestScoreElement.textContent = "";
     resultMessageElement.textContent = "";
 }
