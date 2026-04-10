@@ -89,6 +89,21 @@ function getResultMessage() {
     return "Keep practicing 💪";
 }
 
+function getBestScore() {
+    return localStorage.getItem("bestScore") || 0;
+}
+
+function saveBestScore(newScore) {
+    const best = getBestScore();
+
+    if (newScore > best) {
+        localStorage.setItem("bestScore", newScore);
+        return newScore;
+    }
+
+    return best;
+}
+
 function filterQuestions() {
     const category = categorySelect.value;
     const difficulty = difficultySelect.value;
@@ -234,7 +249,8 @@ function showResult() {
     const oldMessage = resultContainer.querySelector("p");
     if (oldMessage) oldMessage.remove();
 
-    bestScoreElement.textContent = "";
+    const best =saveBestScore(score);
+    bestScoreElement.textContent = `Best score: ${best}`;
     resultMessageElement.textContent = "";
 }
 
