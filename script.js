@@ -104,6 +104,35 @@ function saveBestScore(newScore) {
     return best;
 }
 
+function saveHistory(score) {
+    const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+
+    history.push({
+        score: score,
+        total: filteredQuestions.length,
+        date: new Date().toLocaleDateString()
+    });
+
+    localStorage.setItem("quizHistory", JSON.stringify(history));
+}
+
+function renderHistory() {
+    const history = JSON.parse(localStorage.getItem("quizHistory")) || [];
+
+    const historyContainer = document.getElementById("history");
+
+    if (history.length === 0) {
+        historyContainer.textContent = "No attempts yet.";
+        return;
+    }
+
+    historyContainer.innerHTML = history
+        .slice(-5)
+        .reverse()
+        .map(item => `Score: ${item.score}/${item.total} (${item.date})`)
+        .join("<br>");
+}
+
 function filterQuestions() {
     const category = categorySelect.value;
     const difficulty = difficultySelect.value;
@@ -242,6 +271,9 @@ function showResult() {
     progressBar.style.width = "100%";
 
     scoreElement.textContent = `You scored ${score} out of ${filteredQuestions.length}`;
+
+    saveHistory(score);
+    renderHistory();
 
     const best =saveBestScore(score);
     bestScoreElement.textContent = `Best score: ${best}`;
