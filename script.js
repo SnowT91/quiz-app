@@ -242,16 +242,10 @@ function showResult() {
     progressBar.style.width = "100%";
 
     scoreElement.textContent = `You scored ${score} out of ${filteredQuestions.length}`;
-    
-    const message = document.createElement("p");
-    message.textContent = getResultMessage();
-
-    const oldMessage = resultContainer.querySelector("p");
-    if (oldMessage) oldMessage.remove();
 
     const best =saveBestScore(score);
     bestScoreElement.textContent = `Best score: ${best}`;
-    resultMessageElement.textContent = "";
+    resultMessageElement.textContent = getResultMessage();
 }
 
 startBtn.addEventListener("click", startQuiz);
