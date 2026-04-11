@@ -4,13 +4,17 @@ Interactive Quiz App built with HTML, CSS and JavaScript.
 
 ## Features
 
+- Start screen with quiz settings (category & difficulty)
 - Multiple choice questions
-- Highlights correct and incorrect answers
-- Score calculation
-- Restart quiz functionality
-- 10-second timer for each question
+- Dynamic question filtering
+- Timer for each question (10 seconds)
 - Progress bar quiz completion
-- Animated feddback for selected answers
+- Question counter (e.g. 1 of 5)
+- Highlights correct and incorrect answers
+- Next question navigation
+- Final score screen
+- Responsive design
+- Animated feedback (correct / wrong answers)
 
 ## Technologies
 
@@ -20,7 +24,17 @@ Interactive Quiz App built with HTML, CSS and JavaScript.
 
 ## Project Goal
 
-This project helps practice DOM manipulation, event handling, state management, timers, and dynamic UI updates with vanilla JavaScript.
+This project was built to practice:
+- DOM manipulation
+- Event handling
+- State management
+- Timers (setInterval)
+- Dynamic UI updates
+- Working with user input (filters)
+
+## Future Improvements
+- Fetch questions from API
+- Shuffle questions and answers
 
 ## Live Demo
 
@@ -29,3 +43,13 @@ This project helps practice DOM manipulation, event handling, state management, 
 ## Screenshot
 
 ![Quiz App Screenshot](images/screenshot.png)
+
+## Version
+
+### V2
+
+- Added start screen with quiz options
+- Added category and difficulty filters
+- Added quetion counter
+- Added next question button
+- Improved UI/UX and layout
