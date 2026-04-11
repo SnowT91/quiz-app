@@ -154,6 +154,8 @@ function startQuiz() {
 
     currentQuestionIndex = 0;
     score = 0;
+
+    progressBar.style.width = "0%";
     
     resultContainer.classList.add("hidden");
     questionContainer.classList.remove("hidden");
