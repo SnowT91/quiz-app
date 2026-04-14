@@ -134,10 +134,12 @@ function filterQuestions() {
     }
 }
 
-function startQuiz() {
+async function startQuiz() {
     startScreen.classList.add("hidden");
 
-    filterQuestions();
+    await fetchQuestions();
+
+    filteredQuestions = questions;
 
     currentQuestionIndex = 0;
     score = 0;
