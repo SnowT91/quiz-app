@@ -1,60 +1,47 @@
-const questions = [
-    {
-        question: "What is the capital of France?",
-        category: "general",
-        difficulty: "easy",
-        answers: [
-            { text: "Paris", correct: true },
-            { text: "London", correct: false },
-            { text: "Berlin", correct: false },
-            { text: "Madrid", correct: false }
-        ]
-    },
-    {
-        question: "Which language runs in web browser?",
-        category: "javascript",
-        difficulty: "easy",
-        answers: [
-            { text: "Java", correct: false },
-            { text: "C", correct: false },
-            { text: "Python", correct: false },
-            { text: "JavaScript", correct: true }
-        ]
-    },
-    {
-        question: "Who wrote 'Harry Potter'?",
-        category: "general",
-        difficulty: "easy",
-        answers: [
-            { text: "J.K. Rowling", correct: true },
-            { text: "J.R.R. Tolkien", correct: false },
-            { text: "Mark Twain", correct: false },
-            { text: "Ernest Hemingway", correct: false }  
-        ]
-    },
-    {
-        question: "What does CSS stand for?",
-        category: "javascript",
-        difficulty: "hard",
-        answers: [
-            { text: "Computer Style Sheets", correct: false },
-            { text: "Cascading Style Sheets", correct: true },
-            { text: "Creative Style Sheets", correct: false },
-            { text: "Colorful Style Sheets", correct: false } 
-        ]
-    },
-    {
-        question: "Which company developed JavaScript?",
-        category: "javascript",
-        difficulty: "hard",
-        answers: [
-            { text: "Microsoft", correct: false },
-            { text: "Sun Microsystems", correct: false },
-            { text: "Netscape", correct: true },
-            { text: "Oracle", correct: false } 
-        ]
+let questions = [];
+
+async function fetchQuestions() {
+    const loading = document.getElementById("loading");
+
+    try {
+        loading.classList.remove("hidden");
+
+        const response = await fetch("https://opentdb.com/api.php?amount=5&type=multiple");
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch questions");
+        }
+        const data = await response.json();
+
+        questions = data.results.map(q => {
+            const answers = [
+                ...q.incorrect_answers.map(a => ({text: a, correct: false})),
+                {text: q.correct_answer, correct: true}
+            ];
+                
+            return {
+                question: decodeHTML(q.question),
+                category: shuffleArray(answers)
+            };
+        });
+    
+} catch (error) {
+        alert("Error fetching questions. Please try again.");
+        console.error(error);
+    } finally {
+        loading.classList.add("hidden");
     }
-];
+}
+
+function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function decodeHTML(html) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
 
 const startScreen = document.getElementById("start-screen");
 const quizScreen = document.getElementById("quiz-screen");
