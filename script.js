@@ -139,7 +139,7 @@ async function startQuiz() {
 
     await fetchQuestions();
 
-    filteredQuestions = questions;
+    filteredQuestions = shuffleArray(questions);
 
     currentQuestionIndex = 0;
     score = 0;
