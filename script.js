@@ -21,7 +21,7 @@ async function fetchQuestions() {
                 
             return {
                 question: decodeHTML(q.question),
-                category: shuffleArray(answers)
+                answers: shuffleArray(answers)
             };
         });
     
@@ -247,11 +247,15 @@ function goToNextQuestion() {
 }
 
 function updateProgressBar() {
+    if (!filteredQuestions.length) return;
+
     const progress = ((currentQuestionIndex +1) / filteredQuestions.length) * 100;
     progressBar.style.width = `${progress}%`;
 }
 
 function updateQuestionCounter() {
+    if (!filteredQuestions.length) return;
+
     questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${filteredQuestions.length}`;
 }
 
