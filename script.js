@@ -30,6 +30,7 @@ async function fetchQuestions() {
         console.error(error);
     } finally {
         loading.classList.add("hidden");
+        startBtn.disabled = false;
     }
 }
 
@@ -135,6 +136,8 @@ function filterQuestions() {
 }
 
 async function startQuiz() {
+    startBtn.disabled = true;
+
     startScreen.classList.add("hidden");
 
     await fetchQuestions();
