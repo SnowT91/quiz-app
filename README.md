@@ -4,17 +4,12 @@ Interactive Quiz App built with HTML, CSS and JavaScript.
 
 ## Features
 
-- Start screen with quiz settings (category & difficulty)
-- Multiple choice questions
-- Dynamic question filtering
-- Timer for each question (10 seconds)
-- Progress bar quiz completion
-- Question counter (e.g. 1 of 5)
-- Highlights correct and incorrect answers
-- Next question navigation
-- Final score screen
-- Responsive design
-- Animated feedback (correct / wrong answers)
+- **Dynamic Data:** Fetches questions from the OpenTDB API.
+- **Customizable:** Start screen with category and difficulty filters.
+- **Game Mechanics:** 10 seconds timer per question, randomized answers, and score tracking.
+- **Interactive UI:** Animated feedback for correct / wrong answers, dynamic progress bar, and question counter.
+- **History Tracking:** Saves and displays the history of your last 5 attempts using `localStorage`.
+- **Responsive & Accessible:** Mobile-friendly design with keyboard navigation support (`:focus-visible`).
 
 ## Technologies
 
@@ -28,13 +23,15 @@ This project was built to practice:
 - DOM manipulation
 - Event handling
 - State management
-- Timers (setInterval)
+- Timers (`setInterval`)
 - Dynamic UI updates
-- Working with user input (filters)
+- Working with REST APIs and async/await
+- Error handling and Edge cases
 
 ## Future Improvements
-- Fetch questions from API
-- Shuffle questions and answers
+
+- Add sound effects
+- Add support for multiple players
 
 ## Live Demo
 
@@ -46,10 +43,11 @@ This project was built to practice:
 
 ## Version
 
-### V2
+### V2.1
 
-- Added start screen with quiz options
-- Added category and difficulty filters
-- Added quetion counter
-- Added next question button
-- Improved UI/UX and layout
+- Added OpenTDB API integration
+- Added dynamic difficulty and category via API
+- Implemented `async/await` data fetching
+- Added CSS Spinner for loading state
+- Replaced native `alert()` with a custom UI error handler
+- Implemented answer shuffle (Fisher-Yates algorithm)

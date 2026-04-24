@@ -1,3 +1,14 @@
+:root {
+    --primary-color: #3498db;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --bg-gradient: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    --text-color: #333;
+    --text-muted: #666;
+    --button-text-color: #fff;
+    --card-bg: #ffffff;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -5,7 +16,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    background: var(--bg-gradient);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -16,7 +27,7 @@ body {
 .quiz-container {
     width: 100%;
     max-width: 420px;
-    background: #ffffff;
+    background: var(--card-bg);
     padding: 28px;
     border-radius: 20px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
@@ -37,7 +48,7 @@ h1 {
 
 .quiz-intro {
     font-size: 17px;
-    color: #444;
+    color: var(--text-color);
     margin: 0;
 }
 
@@ -49,8 +60,8 @@ h1 {
 }
 
 .quiz-meta span {
-    background: #f3f4f6;
-    color: #333;
+    background: var(--bg-gradient);
+    color: var(--text-color);
     padding: 8px 12px;
     border-radius: 999px;
     font-size: 14px;
@@ -67,14 +78,14 @@ h1 {
 select {
     padding: 8px;
     border-radius: 6px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--bg-gradient);
     font-size: 14px;
 }
 
 .progress-wrapper {
     width: 100%;
     height: 10px;
-    background: #eee;
+    background: var(--button-text-color);
     border-radius: 999px;
     overflow: hidden;
     margin-bottom: 16px;
@@ -83,7 +94,7 @@ select {
 .progress-bar {
     height: 100%;
     width: 0%;
-    background: #3498db;
+    background:  var(--primary-color);
     transition: width 0.3s ease;
 }
 
@@ -99,7 +110,7 @@ select {
 .question-counter {
     font-size: 14px;
     font-weight: bold;
-    color: #555;
+    color:  var(--text-muted);
 }
 
 .timer {
@@ -108,9 +119,23 @@ select {
 }
 
 #loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
     font-size: 18px;
     font-weight: bold;
+    color: var(--text-color);
     margin-bottom: 16px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 .question {
@@ -132,8 +157,8 @@ button {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    background: #3498db;
-    color: white;
+    background:  var(--primary-color);
+    color: var(--button-text-color);
     transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
 }
 
@@ -143,18 +168,23 @@ button:hover:not(:disabled) {
 }
 
 button.correct {
-    background: #2ecc71;
+    background: var(--success-color);
     animation: pulse 0.35s ease;
 }
 
 button.wrong {
-    background: #e74c3c;
+    background: var(--danger-color);
     animation: shake 0.35s ease;
 }
 
 button:disabled {
     cursor: not-allowed;
     opacity: 0.9;
+}
+
+button:focus-visible {
+    outline: 3px solid  var(--primary-color);
+    outline-offset: 2px;
 }
 
 .primary-btn,
@@ -177,24 +207,53 @@ button:disabled {
 .history {
     margin-top: 10px;
     font-size: 14px;
-    color: #666;
+    color: var(--text-muted);
 }
 
 .best-score {
     font-size: 16px;
     font-weight: bold;
-    color: #3498db;
+    color: var(--primary-color);
     margin: 0;
 }
 
 .result-message {
     font-size: 16px;
-    color: #444;
+    color: var(--text-color);
     margin: 0;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.error-text {
+    color: var(--danger-color);
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.secondary-btn {
+    background: var(--text-muted);
+    width: 100%;
+    font-weight: bold;
+}
+
+.secondary-btn:hover:not(:disabled) {
+    background: #555;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
 @keyframes shake {

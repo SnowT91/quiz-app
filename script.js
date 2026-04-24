@@ -5,43 +5,64 @@ async function fetchQuestions() {
 
     try {
         loading.classList.remove("hidden");
+        errorContainer.classList.add("hidden"); // Прячем прошлые ошибки
 
-        const response = await fetch("https://opentdb.com/api.php?amount=5&type=multiple");
+        let url = "https://opentdb.com/api.php?amount=5&type=multiple";
+        const difficulty = difficultySelect.value;
+        const category = categorySelect.value;
+        const categoryMap = { "general": 9, "computers": 18 };
+
+        if (difficulty !== "all") url += `&difficulty=${difficulty}`;
+        if (category !== "all") url += `&category=${categoryMap[category] || category}`;
+
+        const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error("Failed to fetch questions");
+            throw new Error("Failed to connect to the server.");
         }
+
         const data = await response.json();
+
+        if (!data.results || data.results.length === 0) {
+            throw new Error("No questions found. Try different settings.");
+        }
 
         questions = data.results.map(q => {
             const answers = [
-                ...q.incorrect_answers.map(a => ({text: a, correct: false})),
+                ...q.incorrect_answers.map(a => ({text: decodeHTML(a), correct: false})),
                 {text: q.correct_answer, correct: true}
             ];
-                
             return {
                 question: decodeHTML(q.question),
                 answers: shuffleArray(answers)
             };
         });
+
+        return true; // Возвращаем true, если всё прошло успешно
     
-} catch (error) {
-        alert("Error fetching questions. Please try again.");
+    } catch (error) {
         console.error(error);
-    } finally {
+        //Если ошибка: прячем лоадер, показываем кастомный текст ошибки
         loading.classList.add("hidden");
-        startBtn.disabled = false;
+        errorText.textContent = error.message || "An unexpected error occured.";
+        errorContainer.classList.remove("hidden");    
+        return false; // Возвращаем false, сигнализируя об ошибке
     }
 }
 
 function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
+    const newArray = [...array];
+
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
 }
 
 function decodeHTML(html) {
-    const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.documentElement.textContent;
 }
 
 const startScreen = document.getElementById("start-screen");
@@ -61,6 +82,9 @@ const resultMessageElement = document.getElementById("result-message");
 const restartBtn = document.getElementById("restart-btn");
 const timerElement = document.getElementById("timer");
 const progressBar = document.getElementById("progress-bar");
+const errorContainer = document.getElementById("error-container");
+const errorText = document.getElementById("error-text");
+const backBtn = document.getElementById("back-btn");
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -114,46 +138,51 @@ function renderHistory() {
         return;
     }
 
-    historyContainer.innerHTML = history
+    const historyItems = history
         .slice(-5)
         .reverse()
-        .map(item => `Score: ${item.score}/${item.total} (${item.date})`)
-        .join("<br>");
-}
-
-function filterQuestions() {
-    const category = categorySelect.value;
-    const difficulty = difficultySelect.value;
-
-    filteredQuestions = questions.filter(q => {
-        return (category === "all" || q.category === category) &&
-                (difficulty === "all" || q.difficulty === difficulty);
-    });
-
-    if (filteredQuestions.length === 0) {
-        filteredQuestions = questions;
-    }
+        .map(item => `<li>Score: ${item.score}/${item.total} <span style="color: #999; font-size: 12px;">(${item.date})</span></li>`)
+        .join("");
+    historyContainer.innerHTML = `<ul style="list-style: none; padding: 0; margin: 0;">${historyItems}</ul>`;
 }
 
 async function startQuiz() {
     startBtn.disabled = true;
+    restartBtn.disabled = true; // Защита от двойного клика при рестарте
 
+    //1. Прячем стартовый экран и результаты
     startScreen.classList.add("hidden");
+    resultContainer.classList.add("hidden");
 
-    await fetchQuestions();
+    //2. Показываем экран викторины (чтобы был виден loading), но прячем сам контейнер с вопросом, зачищаем ошибки при рестарте
+    quizScreen.classList.remove("hidden");
+    questionContainer.classList.add("hidden");
+    errorContainer.classList.add("hidden");
+
+    //. 3. Зачищаем стейт перед новым запросом, ждем загрузку вопросов
+    questions = [];
+    
+    const isSuccess = await fetchQuestions();
+
+    restartBtn.disabled = false;
+    startBtn.disabled = false;
+
+    //4. Если данные не загрузились (isSuccess === false), прерываем функцию. // (Пользователь уже видит errorContainer благодаря логике внутри fetchQuestions)
+    if (!isSuccess) {
+        return;
+    }
+    
+    //5. Если все отлично, прячем лоадер и показываем вопросы
+    document.getElementById("loading").classList.add("hidden");
 
     filteredQuestions = shuffleArray(questions);
-
     currentQuestionIndex = 0;
     score = 0;
 
     progressBar.style.width = "0%";
     
-    resultContainer.classList.add("hidden");
+    //6. Показываем контейнер с вопросами и прячем кнопку Next
     questionContainer.classList.remove("hidden");
-    
-    quizScreen.classList.remove("hidden");
-
     nextBtn.classList.add("hidden");
 
     showQuestion();
@@ -206,14 +235,7 @@ function startTimer() {
 }
 
 function handleTimeOut() {
-    Array.from(answerButtons.children).forEach((button) => {
-        if (button.dataset.correct === "true") {
-            button.classList.add("correct");
-        }
-        button.disabled = true;
-    });
-
-    nextBtn.classList.remove("hidden");
+    revealAnswer();
 }
 
 function selectAnswer(e) {
@@ -229,6 +251,10 @@ function selectAnswer(e) {
         selectedButton.classList.add("wrong");
     }
 
+    revealAnswer(); // Вызываем вместо дублирования цикла
+}
+
+function revealAnswer() {  
     Array.from(answerButtons.children).forEach((button) => {
         if (button.dataset.correct === "true") {
             button.classList.add("correct");
@@ -281,3 +307,8 @@ function showResult() {
 startBtn.addEventListener("click", startQuiz);
 nextBtn.addEventListener("click", goToNextQuestion);
 restartBtn.addEventListener("click", startQuiz);
+backBtn.addEventListener("click", () => {
+    quizScreen.classList.add("hidden");
+    errorContainer.classList.add("hidden");
+    startScreen.classList.remove("hidden");
+});
